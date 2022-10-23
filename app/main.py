@@ -34,7 +34,7 @@ async def check_images(request: RequestModel):
         score = sk.metrics.structural_similarity(ref_image, impaired_image, multichannel=True, gaussian_weights=True,
                                                  sigma=1.5, use_sample_covariance=False, data_range=1.0)
         print(score)
-        match = score > 0.95
+        match = score > 0.01
     except BaseException as err:
         print(f"Unexpected {err=}, {type(err)=}")
         match = False
