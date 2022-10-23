@@ -34,6 +34,7 @@ async def check_images(request: RequestModel):
         match = score > 0.95
     except:
         match = False
-    response = ResponseModel(match=match)
+        score = -1
+    response = ResponseModel(match=match,score=score)
 
     return response

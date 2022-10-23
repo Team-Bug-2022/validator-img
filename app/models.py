@@ -6,3 +6,4 @@ class RequestModel(BaseModel):
 
 class ResponseModel(BaseModel):
   match : bool
+  score : float
