@@ -20,11 +20,11 @@ async def say_hello(name: str):
 @app.post("/checkImgages",status_code=status.HTTP_200_OK, response_model=ResponseModel)
 async def check_images(request: RequestModel):
     try:
-        urllib.request.urlretrieve(request.urlImageOld, "app/media/old.png")
-        urllib.request.urlretrieve(request.urlImageNew, "app/media/new.png")
-        ref_image = imread("app/media/old.png")
+        urllib.request.urlretrieve(request.urlImageOld, "old.png")
+        urllib.request.urlretrieve(request.urlImageNew, "new.png")
+        ref_image = imread("old.png")
         ref_image = rgb2gray(ref_image)
-        impaired_image = imread('app/media/new.png')
+        impaired_image = imread('new.png')
         impaired_image = rgb2gray(impaired_image)
         impaired_image = resize(impaired_image, (ref_image.shape[0], ref_image.shape[1]),
                                 anti_aliasing=True)
@@ -32,7 +32,8 @@ async def check_images(request: RequestModel):
                                                  sigma=1.5, use_sample_covariance=False, data_range=1.0)
         print(score)
         match = score > 0.95
-    except:
+    except BaseException as err:
+        print(f"Unexpected {err=}, {type(err)=}")
         match = False
         score = -1
     response = ResponseModel(match=match,score=score)
