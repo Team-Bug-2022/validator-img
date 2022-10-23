@@ -1,3 +1,5 @@
+import cv2
+import numpy as np
 from fastapi import FastAPI,status
 import urllib.request
 from skimage.io import imread
@@ -5,6 +7,7 @@ from skimage.color import rgb2gray
 from skimage.transform import resize
 import skimage  as sk
 from app.models import *
+
 
 app = FastAPI(swagger_ui_parameters={"syntaxHighlight.theme": "nord"})
 
@@ -22,9 +25,9 @@ async def check_images(request: RequestModel):
     try:
         urllib.request.urlretrieve(request.urlImageOld, "old.png")
         urllib.request.urlretrieve(request.urlImageNew, "new.png")
-        ref_image = imread("old.png")
+        ref_image = imread("old.png",pilmode ='RGB').astype(np.float)
         ref_image = rgb2gray(ref_image)
-        impaired_image = imread('new.png')
+        impaired_image = imread("new.png",pilmode ='RGB').astype(np.float)
         impaired_image = rgb2gray(impaired_image)
         impaired_image = resize(impaired_image, (ref_image.shape[0], ref_image.shape[1]),
                                 anti_aliasing=True)
